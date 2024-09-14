@@ -1,0 +1,24 @@
+{
+  "name": "stockflow",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@sthefanyk/eslint-config": "^1.0.3",
+    "@types/node": "^22.5.5",
+    "eslint": "^8.57.0",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2",
+    "vite-tsconfig-paths": "^5.0.1",
+    "vitest": "^2.1.1"
+  }
+}
