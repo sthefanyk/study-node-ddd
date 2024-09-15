@@ -5,12 +5,24 @@ import { Optional } from '@/core/shared/types/optional'
 export interface ProductProps {
     name: string
     price: number
-    quantity: number
+    quantityInStock: number
     minimumQuantity: number
 }
 
 export class Product extends Entity<ProductProps> {
-    get minimumQuantity(): number {
+    get name() {
+        return this.props.name
+    }
+
+    get quantityInStock() {
+        return this.props.quantityInStock
+    }
+
+    get price() {
+        return this.props.price
+    }
+
+    get minimumQuantity() {
         return this.props.minimumQuantity
     }
 

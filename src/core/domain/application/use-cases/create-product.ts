@@ -6,7 +6,7 @@ type CreateProductUseCaseInput = {
     id?: string
     name: string
     price: number
-    quantity: number
+    quantityInStock: number
     minimumQuantity?: number
 }
 
@@ -21,7 +21,7 @@ export class CreateProductUseCase {
         id,
         name,
         price,
-        quantity,
+        quantityInStock,
         minimumQuantity,
     }: CreateProductUseCaseInput): Promise<CreateProductUseCaseOutput> {
         const product = Product.create(
@@ -29,7 +29,7 @@ export class CreateProductUseCase {
                 name,
                 price,
                 minimumQuantity,
-                quantity,
+                quantityInStock,
             },
             new UniqueEntityID(id),
         )
