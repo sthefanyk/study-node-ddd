@@ -1,47 +1,35 @@
-import { Entity } from '@/core/shared/entities/entity'
+import { AggregateRoot } from '@/core/shared/entities/aggregate-root'
 import { UniqueEntityID } from '@/core/shared/entities/unique-entity-id'
 import { Optional } from '@/core/shared/types/optional'
+import { SaleItemsList } from './sale-items-list'
 
 interface SaleProps {
-    quantity: number
     dateOfSale?: Date
-    productId: UniqueEntityID
-    priceProductTimeOfSale: number
+    saleItems: SaleItemsList
 }
 
-export class Sale extends Entity<SaleProps> {
-    get quatity() {
-        return this.props.quantity
-    }
-
+export class Sale extends AggregateRoot<SaleProps> {
     get dateOfSale() {
         return this.props.dateOfSale
     }
 
-    get productId() {
-        return this.props.productId
+    get saleItems() {
+        return this.props.saleItems
     }
 
-    get priceProductTimeOfSale() {
-        return this.props.priceProductTimeOfSale
-    }
-
-    get profitFromSale() {
-        return this.props.priceProductTimeOfSale * this.props.quantity
+    set saleItems(saleItems: SaleItemsList) {
+        this.props.saleItems = saleItems
     }
 
     static create(
-        props: Optional<SaleProps, 'dateOfSale'>,
+        props: Optional<SaleProps, 'dateOfSale' | 'saleItems'>,
         id?: UniqueEntityID,
     ) {
-        if (props.quantity < 1) {
-            throw new Error()
-        }
-
         const sale = new Sale(
             {
                 ...props,
                 dateOfSale: new Date(),
+                saleItems: props.saleItems ?? new SaleItemsList(),
             },
             id,
         )

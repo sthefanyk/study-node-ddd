@@ -26,7 +26,7 @@ describe('Set minimum quantity', () => {
             productId: product.id.toValue(),
         })
 
-        expect(result.product.minimumQuantity).toEqual(50)
+        expect(result.isRight()).toBe(true)
         expect(productsRepository.products[0].minimumQuantity).toEqual(50)
     })
 })

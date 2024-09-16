@@ -6,13 +6,13 @@ describe('Create product', () => {
         const repository = new InMemoryProductRepository()
         const usecase = new CreateProductUseCase(repository)
 
-        const { product } = await usecase.execute({
+        const result = await usecase.execute({
             name: 'computador',
             price: 20,
             quantityInStock: 1000,
         })
 
-        expect(product.id.toString()).toEqual(expect.any(String))
+        expect(result.isRight()).toBe(true)
         expect(repository.products).length(1)
     })
 })

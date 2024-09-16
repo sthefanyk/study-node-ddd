@@ -1,5 +1,5 @@
 import { InMemorySaleRepository } from '@/core/infra/repositories/in-memory/in-memory-sales-repository'
-import { MakeSaleUseCase } from './make-sale'
+import { MakeSaleUseCase, SaleItemInput } from './make-sale'
 import { TestContext } from 'vitest'
 import { InMemoryProductRepository } from '@/core/infra/repositories/in-memory/in-memory-product-repository'
 import { makeProductFactory } from '@/core/test/factory/make-product-factory'
@@ -26,15 +26,32 @@ describe('Create sale', () => {
         productsRepository,
         salesRepository,
     }: TestContextWithSut) => {
-        const product = makeProductFactory()
-        await productsRepository.create(product)
+        const numberOfItems = 5
 
-        const { sale } = await sut.execute({
-            productId: product.id.toString(),
-            quantity: 10,
+        for (let i = 1; i <= numberOfItems; i++) {
+            const product = makeProductFactory()
+            await productsRepository.create(product)
+        }
+
+        const saleItems: SaleItemInput[] = productsRepository.products.map(
+            (product) => {
+                const saleItem: SaleItemInput = {
+                    productId: product.id.toString(),
+                    quantity: 10,
+                }
+
+                return saleItem
+            },
+        )
+
+        const result = await sut.execute({
+            saleItems,
         })
 
-        expect(sale.id.toString()).toEqual(expect.any(String))
+        expect(result.isRight()).toBe(true)
         expect(salesRepository.sales).length(1)
+        expect(salesRepository.sales[0].saleItems.currentItems).toHaveLength(
+            numberOfItems,
+        )
     })
 })
