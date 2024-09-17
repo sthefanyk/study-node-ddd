@@ -2,7 +2,7 @@ import { AggregateRoot } from '@/core/shared/entities/aggregate-root'
 import { UniqueEntityID } from '@/core/shared/entities/unique-entity-id'
 import { Optional } from '@/core/shared/types/optional'
 import { SaleItemsList } from './sale-items-list'
-import { ValidationError } from '../error/validation-error'
+import { ValidationError } from '../../../../shared/errors/validation-error'
 
 export interface SaleProps {
     dateOfSale?: Date

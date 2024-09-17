@@ -1,7 +1,7 @@
 import { UniqueEntityID } from '@/core/shared/entities/unique-entity-id'
 import { Product } from '../../enterprise/entities/product'
 import { ProductRepository } from '../contracts/product-repository'
-import { Either, left, right } from '@/core/shared/errors/either'
+import { Either, left, right } from '@/core/shared/errors/contracts/either'
 
 type CreateProductUseCaseInput = {
     id?: string

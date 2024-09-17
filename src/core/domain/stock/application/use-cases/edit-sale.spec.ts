@@ -8,7 +8,7 @@ import { makeSaleFactory } from '@/core/test/factory/make-sale-factory'
 import { makeSaleItemFactory } from '@/core/test/factory/make-sale-items-factory'
 import { InMemorySaleItemsRepository } from '@/core/infra/repositories/in-memory/in-memory-sale-items-repository'
 import { makeProductFactory } from '@/core/test/factory/make-product-factory'
-import { ResourceNotFoundError } from '../errors/resource-not-found-error'
+import { ResourceNotFoundError } from '../../../../shared/errors/resource-not-found-error'
 
 interface TestContextWithSut extends TestContext {
     productsRepository: InMemoryProductRepository

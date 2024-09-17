@@ -1,6 +1,6 @@
 import { Entity } from '@/core/shared/entities/entity'
 import { UniqueEntityID } from '@/core/shared/entities/unique-entity-id'
-import { ValidationError } from '../error/validation-error'
+import { ValidationError } from '../../../../shared/errors/validation-error'
 
 export interface SaleItemProps {
     productId: UniqueEntityID

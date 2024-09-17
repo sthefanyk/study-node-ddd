@@ -2,12 +2,12 @@ import { Entity } from '@/core/shared/entities/entity'
 import { UniqueEntityID } from '@/core/shared/entities/unique-entity-id'
 import { Optional } from '@/core/shared/types/optional'
 
-interface NotificationProps {
+export interface NotificationProps {
     recipientId: UniqueEntityID
     title: string
     content: string
     created_at: Date
-    read?: Date
+    readAt?: Date
 }
 
 export class Notification extends Entity<NotificationProps> {
@@ -23,8 +23,12 @@ export class Notification extends Entity<NotificationProps> {
         return this.props.content
     }
 
-    get read() {
-        return this.props.read
+    get readAt() {
+        return this.props.readAt
+    }
+
+    read() {
+        this.props.readAt = new Date()
     }
 
     static create(

@@ -1,7 +1,7 @@
-import { Either, left, right } from '@/core/shared/errors/either'
+import { Either, left, right } from '@/core/shared/errors/contracts/either'
 import { Product } from '../../enterprise/entities/product'
 import { ProductRepository } from '../contracts/product-repository'
-import { ResourceNotFoundError } from '../errors/resource-not-found-error'
+import { ResourceNotFoundError } from '../../../../shared/errors/resource-not-found-error'
 
 interface SetMinimumQuantityUseCaseInput {
     productId: string

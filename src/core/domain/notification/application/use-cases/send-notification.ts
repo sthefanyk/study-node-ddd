@@ -1,4 +1,4 @@
-import { Either, right } from '@/core/shared/errors/either'
+import { Either, right } from '@/core/shared/errors/contracts/either'
 import { NotificationsRepository } from '../contracts/notifications-repository'
 import { Notification } from '../../enterprise/entities/notification'
 import { UniqueEntityID } from '@/core/shared/entities/unique-entity-id'

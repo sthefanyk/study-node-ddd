@@ -1,12 +1,12 @@
-import { Either, left, right } from '@/core/shared/errors/either'
+import { Either, left, right } from '@/core/shared/errors/contracts/either'
 import { ProductRepository } from '../contracts/product-repository'
 import { SaleRepository } from '../contracts/sale-repository'
-import { ResourceNotFoundError } from '../errors/resource-not-found-error'
+import { ResourceNotFoundError } from '../../../../shared/errors/resource-not-found-error'
 import { Sale } from '../../enterprise/entities/sale'
 import { SaleItem } from '../../enterprise/entities/sale-item'
 import { SaleItemsRepository } from '../contracts/sale-items-repository'
 import { SaleItemsList } from '../../enterprise/entities/sale-items-list'
-import { ValidationError } from '../../enterprise/error/validation-error'
+import { ValidationError } from '../../../../shared/errors/validation-error'
 
 export interface EditSaleItemInput {
     productId: string

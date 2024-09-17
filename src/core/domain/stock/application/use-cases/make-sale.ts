@@ -1,12 +1,12 @@
 import { Sale } from '../../enterprise/entities/sale'
 import { ProductRepository } from '../contracts/product-repository'
 import { SaleRepository } from '../contracts/sale-repository'
-import { Either, left, right } from '@/core/shared/errors/either'
-import { ResourceNotFoundError } from '../errors/resource-not-found-error'
+import { Either, left, right } from '@/core/shared/errors/contracts/either'
+import { ResourceNotFoundError } from '../../../../shared/errors/resource-not-found-error'
 import { SaleItem } from '../../enterprise/entities/sale-item'
 import { SaleItemsList } from '../../enterprise/entities/sale-items-list'
 import { UniqueEntityID } from '@/core/shared/entities/unique-entity-id'
-import { ValidationError } from '../../enterprise/error/validation-error'
+import { ValidationError } from '../../../../shared/errors/validation-error'
 
 export interface SaleItemInput {
     productId: string
