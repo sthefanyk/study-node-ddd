@@ -3,9 +3,9 @@ import { MakeSaleUseCase, SaleItemInput } from './make-sale'
 import { TestContext } from 'vitest'
 import { InMemoryProductRepository } from '@/core/infra/repositories/in-memory/in-memory-product-repository'
 import { makeProductFactory } from '@/core/test/factory/make-product-factory'
-import { ValidationError } from '../../../../shared/errors/validation-error'
-import { ResourceNotFoundError } from '../../../../shared/errors/resource-not-found-error'
 import { InMemorySaleItemsRepository } from '@/core/infra/repositories/in-memory/in-memory-sale-items-repository'
+import { ResourceNotFoundError } from '@/core/shared/errors/resource-not-found-error'
+import { ValidationError } from '@/core/shared/errors/validation-error'
 
 interface TestContextWithSut extends TestContext {
     productsRepository: InMemoryProductRepository

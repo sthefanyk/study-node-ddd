@@ -1,6 +1,6 @@
 import { Either, left, right } from '@/core/shared/errors/contracts/either'
 import { SaleRepository } from '../contracts/sale-repository'
-import { ResourceNotFoundError } from '../../../../shared/errors/resource-not-found-error'
+import { ResourceNotFoundError } from '@/core/shared/errors/resource-not-found-error'
 
 interface DeleteSaleInput {
     saleId: string
