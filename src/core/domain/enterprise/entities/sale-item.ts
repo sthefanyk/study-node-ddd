@@ -1,7 +1,8 @@
 import { Entity } from '@/core/shared/entities/entity'
 import { UniqueEntityID } from '@/core/shared/entities/unique-entity-id'
+import { ValidationError } from '../error/validation-error'
 
-interface SaleItemProps {
+export interface SaleItemProps {
     productId: UniqueEntityID
     saleId: UniqueEntityID
     quantity: number
@@ -17,7 +18,7 @@ export class SaleItem extends Entity<SaleItemProps> {
         return this.props.saleId
     }
 
-    get quatity() {
+    get quantity() {
         return this.props.quantity
     }
 
@@ -30,8 +31,8 @@ export class SaleItem extends Entity<SaleItemProps> {
     }
 
     static create(props: SaleItemProps, id?: UniqueEntityID) {
-        if (props.quantity < 1) {
-            throw new Error()
+        if (props.quantity < 1 || props.priceProductTimeOfSale <= 0) {
+            throw new ValidationError()
         }
 
         const sale = new SaleItem(props, id)

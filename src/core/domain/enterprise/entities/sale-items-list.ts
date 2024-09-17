@@ -3,6 +3,6 @@ import { SaleItem } from './sale-item'
 
 export class SaleItemsList extends WatchedList<SaleItem> {
     compareItems(a: SaleItem, b: SaleItem): boolean {
-        return a.id === b.id
+        return a.saleId.equals(b.saleId) && a.productId.equals(b.productId)
     }
 }

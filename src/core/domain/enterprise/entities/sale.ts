@@ -2,8 +2,9 @@ import { AggregateRoot } from '@/core/shared/entities/aggregate-root'
 import { UniqueEntityID } from '@/core/shared/entities/unique-entity-id'
 import { Optional } from '@/core/shared/types/optional'
 import { SaleItemsList } from './sale-items-list'
+import { ValidationError } from '../error/validation-error'
 
-interface SaleProps {
+export interface SaleProps {
     dateOfSale?: Date
     saleItems: SaleItemsList
 }
@@ -18,6 +19,10 @@ export class Sale extends AggregateRoot<SaleProps> {
     }
 
     set saleItems(saleItems: SaleItemsList) {
+        if (saleItems.currentItems.length === 0) {
+            throw new ValidationError()
+        }
+
         this.props.saleItems = saleItems
     }
 

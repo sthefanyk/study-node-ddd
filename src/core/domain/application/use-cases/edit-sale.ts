@@ -1,39 +1,52 @@
-import { Sale } from '../../enterprise/entities/sale'
+import { Either, left, right } from '@/core/shared/errors/either'
 import { ProductRepository } from '../contracts/product-repository'
 import { SaleRepository } from '../contracts/sale-repository'
-import { Either, left, right } from '@/core/shared/errors/either'
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
+import { Sale } from '../../enterprise/entities/sale'
 import { SaleItem } from '../../enterprise/entities/sale-item'
+import { SaleItemsRepository } from '../contracts/sale-items-repository'
 import { SaleItemsList } from '../../enterprise/entities/sale-items-list'
-import { UniqueEntityID } from '@/core/shared/entities/unique-entity-id'
 import { ValidationError } from '../../enterprise/error/validation-error'
 
-export interface SaleItemInput {
+export interface EditSaleItemInput {
     productId: string
     quantity: number
 }
 
-interface MakeSaleInput {
-    saleId?: string
-    saleItems: SaleItemInput[]
+interface EditSaleInput {
+    saleId: string
+    saleItems: EditSaleItemInput[]
 }
 
-type MakeSaleOutput = Either<ResourceNotFoundError, { sale: Sale }>
+type EditSaleOutput = Either<
+    ResourceNotFoundError | ValidationError,
+    { sale: Sale }
+>
 
-export class MakeSaleUseCase {
+export class EditSaleUseCase {
     constructor(
         private saleRepository: SaleRepository,
+        private saleItemsRepository: SaleItemsRepository,
         private productRepository: ProductRepository,
     ) {}
 
     async execute({
         saleId,
         saleItems,
-    }: MakeSaleInput): Promise<MakeSaleOutput> {
+    }: EditSaleInput): Promise<EditSaleOutput> {
         try {
-            const sale = Sale.create({}, new UniqueEntityID(saleId))
+            const sale = await this.saleRepository.findById(saleId)
 
-            const saleItemsPromises = saleItems.map(async (saleItem) => {
+            if (!sale) {
+                return left(new ResourceNotFoundError())
+            }
+
+            const currentSaleItems =
+                await this.saleItemsRepository.findManyBySaleId(saleId)
+
+            const saleItemsList = new SaleItemsList(currentSaleItems)
+
+            const newSaleItemsPromises = saleItems.map(async (saleItem) => {
                 const product = await this.productRepository.findById(
                     saleItem.productId,
                 )
@@ -50,11 +63,13 @@ export class MakeSaleUseCase {
                 })
             })
 
-            const resolvedSaleItems = await Promise.all(saleItemsPromises)
+            const resolvedNewSaleItems = await Promise.all(newSaleItemsPromises)
 
-            sale.saleItems = new SaleItemsList(resolvedSaleItems)
+            saleItemsList.update(resolvedNewSaleItems)
 
-            await this.saleRepository.create(sale)
+            sale.saleItems = saleItemsList
+
+            await this.saleRepository.save(sale)
 
             return right({ sale })
         } catch (error) {
