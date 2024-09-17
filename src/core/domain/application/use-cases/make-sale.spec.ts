@@ -5,17 +5,22 @@ import { InMemoryProductRepository } from '@/core/infra/repositories/in-memory/i
 import { makeProductFactory } from '@/core/test/factory/make-product-factory'
 import { ValidationError } from '../../enterprise/error/validation-error'
 import { ResourceNotFoundError } from '../errors/resource-not-found-error'
+import { InMemorySaleItemsRepository } from '@/core/infra/repositories/in-memory/in-memory-sale-items-repository'
 
 interface TestContextWithSut extends TestContext {
     productsRepository: InMemoryProductRepository
     salesRepository: InMemorySaleRepository
+    salesItemsRepository: InMemorySaleItemsRepository
     sut: MakeSaleUseCase
 }
 
-describe('Create sale', () => {
+describe('MakeSaleUseCase', () => {
     beforeEach((context: TestContextWithSut) => {
         context.productsRepository = new InMemoryProductRepository()
-        context.salesRepository = new InMemorySaleRepository()
+        context.salesItemsRepository = new InMemorySaleItemsRepository()
+        context.salesRepository = new InMemorySaleRepository(
+            context.salesItemsRepository,
+        )
 
         context.sut = new MakeSaleUseCase(
             context.salesRepository,
@@ -23,10 +28,11 @@ describe('Create sale', () => {
         )
     })
 
-    it('should be able to make sale', async ({
+    it('should create a new sale with valid sale items', async ({
         sut,
         productsRepository,
         salesRepository,
+        salesItemsRepository,
     }: TestContextWithSut) => {
         const numberOfItems = 5
 
@@ -52,12 +58,10 @@ describe('Create sale', () => {
 
         expect(result.isRight()).toBe(true)
         expect(salesRepository.sales).length(1)
-        expect(salesRepository.sales[0].saleItems.currentItems).toHaveLength(
-            numberOfItems,
-        )
+        expect(salesItemsRepository.items).toHaveLength(numberOfItems)
     })
 
-    it('should return an error if product does not exist', async ({
+    it('should return a ResourceNotFoundError if any product in the sale does not exist', async ({
         sut,
     }: TestContextWithSut) => {
         const saleItems: SaleItemInput[] = [
@@ -72,7 +76,7 @@ describe('Create sale', () => {
         expect(result.value).toBeInstanceOf(ResourceNotFoundError)
     })
 
-    it('should return an error if it has no saleItems', async ({
+    it('should return a ValidationError if no sale items are provided', async ({
         sut,
     }: TestContextWithSut) => {
         const result = await sut.execute({

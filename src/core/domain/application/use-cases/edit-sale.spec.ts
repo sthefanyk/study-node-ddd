@@ -17,11 +17,13 @@ interface TestContextWithSut extends TestContext {
     sut: EditSaleUseCase
 }
 
-describe('Edit sale', () => {
+describe('EditSaleUseCase', () => {
     beforeEach((context: TestContextWithSut) => {
         context.productsRepository = new InMemoryProductRepository()
-        context.salesRepository = new InMemorySaleRepository()
         context.saleItemsRepository = new InMemorySaleItemsRepository()
+        context.salesRepository = new InMemorySaleRepository(
+            context.saleItemsRepository,
+        )
 
         context.sut = new EditSaleUseCase(
             context.salesRepository,
@@ -30,10 +32,11 @@ describe('Edit sale', () => {
         )
     })
 
-    it('should be able to edit an existing sale', async ({
+    it('should update an existing sale and modify its sale items', async ({
         sut,
         salesRepository,
         productsRepository,
+        saleItemsRepository,
     }: TestContextWithSut) => {
         const numberOfItems = 5
 
@@ -75,7 +78,7 @@ describe('Edit sale', () => {
             new UniqueEntityID('sale-1'),
         )
 
-        salesRepository.sales.push(sale)
+        salesRepository.create(sale)
 
         const result = await sut.execute({
             saleId: sale.id.toString(),
@@ -86,16 +89,15 @@ describe('Edit sale', () => {
             ],
         })
 
-        const updatedSale = salesRepository.sales[0].saleItems.currentItems
         expect(result.isRight()).toBe(true)
-        expect(updatedSale).toHaveLength(3)
-        expect(updatedSale[0].productId.toString()).toBe('product-1')
-        expect(updatedSale[1].productId.toString()).toBe('product-3')
-        expect(updatedSale[2].productId.toString()).toBe('product-5')
-        expect(updatedSale[0].quantity).toBe(80)
+        expect(saleItemsRepository.items).length(3)
+        expect(saleItemsRepository.items[2].productId.toString()).toBe(
+            'product-5',
+        )
+        expect(saleItemsRepository.items[0].quantity).toBe(80)
     })
 
-    it('should return an error if sale does not exist', async ({
+    it('should return a ResourceNotFoundError if sale does not exist', async ({
         sut,
     }: TestContextWithSut) => {
         const result = await sut.execute({
