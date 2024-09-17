@@ -1,6 +1,6 @@
-import { SaleItemsRepository } from '@/core/domain/application/contracts/sale-items-repository'
-import { SaleRepository } from '@/core/domain/application/contracts/sale-repository'
-import { Sale } from '@/core/domain/enterprise/entities/sale'
+import { SaleItemsRepository } from '@/core/domain/stock/application/contracts/sale-items-repository'
+import { SaleRepository } from '@/core/domain/stock/application/contracts/sale-repository'
+import { Sale } from '@/core/domain/stock/enterprise/entities/sale'
 
 export class InMemorySaleRepository implements SaleRepository {
     public sales: Sale[] = []

@@ -1,5 +1,5 @@
 import { UniqueEntityID } from '@/core/shared/entities/unique-entity-id'
-import { Sale, SaleProps } from '@/core/domain/enterprise/entities/sale'
+import { Sale, SaleProps } from '@/core/domain/stock/enterprise/entities/sale'
 
 export function makeSaleFactory(
     override: Partial<SaleProps> = {},

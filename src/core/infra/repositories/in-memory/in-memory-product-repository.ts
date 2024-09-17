@@ -1,5 +1,5 @@
-import { ProductRepository } from '@/core/domain/application/contracts/product-repository'
-import { Product } from '@/core/domain/enterprise/entities/product'
+import { ProductRepository } from '@/core/domain/stock/application/contracts/product-repository'
+import { Product } from '@/core/domain/stock/enterprise/entities/product'
 
 export class InMemoryProductRepository implements ProductRepository {
     public products: Product[] = []

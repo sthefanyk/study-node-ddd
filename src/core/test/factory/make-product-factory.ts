@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker'
 import {
     Product,
     ProductProps,
-} from '@/core/domain/enterprise/entities/product'
+} from '@/core/domain/stock/enterprise/entities/product'
 import { UniqueEntityID } from '@/core/shared/entities/unique-entity-id'
 
 export function makeProductFactory(

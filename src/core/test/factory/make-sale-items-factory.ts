@@ -1,7 +1,7 @@
 import {
     SaleItem,
     SaleItemProps,
-} from '@/core/domain/enterprise/entities/sale-item'
+} from '@/core/domain/stock/enterprise/entities/sale-item'
 import { UniqueEntityID } from '@/core/shared/entities/unique-entity-id'
 
 import { faker } from '@faker-js/faker'
