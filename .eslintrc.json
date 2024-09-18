@@ -5,7 +5,7 @@
     ],
     "rules": {
       "no-useless-constructor": "off",
-      "no-esplicit-any": "off"
+      "no-explicit-any": "off"
     },
     "env": {
       "vitest-globals/env": true

@@ -1,6 +1,7 @@
-import { Entity } from '@/core/shared/entities/entity'
+import { AggregateRoot } from '@/core/shared/entities/aggregate-root'
 import { UniqueEntityID } from '@/core/shared/entities/unique-entity-id'
 import { Optional } from '@/core/shared/types/optional'
+import { StockNearingEndEvent } from '../events/stock-nearing-end-event'
 
 export interface ProductProps {
     name: string
@@ -9,7 +10,7 @@ export interface ProductProps {
     minimumQuantity: number
 }
 
-export class Product extends Entity<ProductProps> {
+export class Product extends AggregateRoot<ProductProps> {
     get name() {
         return this.props.name
     }
@@ -32,6 +33,18 @@ export class Product extends Entity<ProductProps> {
         }
     }
 
+    reduceStock(amount: number) {
+        if (amount > this.props.quantityInStock) {
+            throw new Error('Quantidade insuficiente em estoque')
+        }
+
+        this.props.quantityInStock -= amount
+
+        if (this.props.quantityInStock <= this.props.minimumQuantity) {
+            this.addDomainEvent(new StockNearingEndEvent(this))
+        }
+    }
+
     static create(
         props: Optional<ProductProps, 'minimumQuantity'>,
         id?: UniqueEntityID,
@@ -43,6 +56,12 @@ export class Product extends Entity<ProductProps> {
             },
             id,
         )
+
+        const isNewProduct = !id
+
+        if (isNewProduct) {
+            product.addDomainEvent(new StockNearingEndEvent(product))
+        }
 
         return product
     }
